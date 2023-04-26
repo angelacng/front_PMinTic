@@ -1,26 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams,Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import swal from "sweetalert";
 import crud from "../../conexiones/crud";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 
 
-const CrearProductos = () => {
+const ActualizarProducto = () => {
 
-    const { idCategoria } = useParams();
     const navigate = useNavigate();
-
-    const [categoria, setCategoria] = useState([]);
-
-    const cargarCategoriaId = async () => {
-        const response = await crud.GET(`/api/categorias/${idCategoria}`);
-        // console.log(response.categoria.nombre);
-        setCategoria(response.categoria);
-    }    
-    useEffect(() => {
-        cargarCategoriaId();
-    }, []);
+    const { idProducto } = useParams();
+    //console.log(idProducto);
 
     const [producto, setProducto] = useState({
         nombre: '',
@@ -30,11 +20,21 @@ const CrearProductos = () => {
         editorial: '',
         anho: '',
         precio: '',
-        imagen: '',
-        categoriaId: ''
+        imagen: ''
     });
 
-    const { nombre, autor, editorial, anho, descripcion, stock, precio, imagen } = producto;
+    const cargarProducto = async () => {
+        const response = await crud.GET(`/api/productos/producto/${idProducto}`);
+      console.log(response.producto);
+        setProducto(response.producto);
+    }
+
+    useEffect(() => {
+        cargarProducto();
+    }, [])
+    
+
+    const {nombre, autor, editorial, anho, descripcion, stock, precio, imagen,categoriaId } = producto;
 
     const onChange = (e) => {
         setProducto({
@@ -43,7 +43,7 @@ const CrearProductos = () => {
         })
     };
 
-    const ingresarProducto = async () => {
+    const actualizarProducto = async () => {
         const data = {
             nombre: producto.nombre,
             descripcion: producto.descripcion,
@@ -52,17 +52,14 @@ const CrearProductos = () => {
             anho: producto.anho,
             stock: producto.stock,
             precio: producto.precio,
-            imagen: producto.imagen,
-            categoriaId: idCategoria
+            imagen: producto.imagen
         }
-        //        console.log(data);
-        const response = await crud.POST(`/api/productos`, data);
-        const mensaje = response.msg;
-       // console.log(mensaje);
-        const mensaje1 = "El producto fue creado correctamente";
+
+        await crud.PUT(`/api/productos/${idProducto}`, data);
+        const mensaje = "el libro se actualizó correctamente";
         swal({
             title: 'Información',
-            text: mensaje1,
+            text: mensaje,
             icon: 'success',
             buttons: {
                 confirm: {
@@ -74,15 +71,13 @@ const CrearProductos = () => {
                 }
             }
         });
-        //redireccionar a la página de admin:
-        navigate(`/home-productos/${idCategoria}`);
-    };
+        navigate(`/home-productos/${categoriaId}`)
+    }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        ingresarProducto();
-    };
-
+        actualizarProducto();
+    }
     return (
         <>
             <Header />
@@ -95,14 +90,14 @@ const CrearProductos = () => {
                             backgroundImage:
                                 "url('https://res.cloudinary.com/dffbjjc7o/image/upload/v1681954004/fondo_y2obzq.jpg')",
                         }}>
-                        <div className=" flex justify-center">
-                            <h1 className="h-[4rem] mt-4 -mb-2  inline bg-gradient-to-r from-red-800 via-orange-700 to-yellow-600 bg-clip-text font-display font-semibold text-4xl tracking-tight text-transparent">
-                                Agregar Libro a {categoria.nombre}
+                        <div className="ml-10 flex justify-center">
+                            <h1 className="h-[4rem] mt-4 -mb-2 inline bg-gradient-to-r from-red-800 via-orange-700 to-yellow-600 bg-clip-text font-display font-semibold text-4xl tracking-tight text-transparent">
+                                Editar Libro
                             </h1>
                         </div>
-                        <div className="mt-0 flex justify-center">
+                        <div className=" flex justify-center">
                             <form
-                                className="my-2 bg-amber-50 shadow rounded-lg p-10"
+                                className="my-0 bg-amber-50 shadow rounded-lg p-10"
                                 onSubmit={onSubmit}
                             >
                                 <div className="grid grid-cols-3 gap-4">
@@ -211,13 +206,13 @@ const CrearProductos = () => {
                                     <div className="col-span-3 ... text-center">
                                         <input
                                             type="submit"
-                                            value="Agregar libro"
+                                            value="Actualizar libro"
                                             className="bg-green-900 mb-5 w-full py-3 text-white uppercase font-bold rounded-xl hover:cursor-pointer hover:bg-green-600 transition-colors"
                                         />
                                         <Link
                                             className="block text-xl mt-2 font-bold text-teal-900"
-                                            to={`/home-productos/${idCategoria}`}>
-                                            Cancelar
+                                            to={`/home-productos/${categoriaId}`}>
+                                            Regresar
                                         </Link>
                                     </div>
 
@@ -236,4 +231,4 @@ const CrearProductos = () => {
         </>
     );
 }
-export default CrearProductos;
+export default ActualizarProducto;

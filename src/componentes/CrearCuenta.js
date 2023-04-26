@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import crud from "../conexiones/crud";
+import logo512 from "../logo512.png";
 
 const CrearCuenta = () => {
 
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const [usuario, setUsuario] = useState({
     nombre: "",
@@ -26,7 +27,7 @@ const CrearCuenta = () => {
 
   const crearCuenta = async () => {
 
-    if (nombre==="" || email==="" || password==="") {
+    if (nombre === "" || email === "" || password === "") {
       console.log('hay campos vacíos')
       const mensaje = "Todos los campos son obligatorios";
       swal({
@@ -44,7 +45,7 @@ const CrearCuenta = () => {
         }
       })
     }
-       //los dos passwords deben ser iguales
+    //los dos passwords deben ser iguales
     else if (password !== confirmar) {
       console.log('diferentes')
       const mensaje = "Las contraseñas son diferentes";
@@ -72,8 +73,8 @@ const CrearCuenta = () => {
       const response = await crud.POST(`/api/usuarios`, data);
       const mensaje = response.msg;
       //console.log(mensaje);
-     
-     
+
+
       if (mensaje === "El usuario ya existe") {
         const mensaje = "El usuario ya existe";
         swal({
@@ -107,10 +108,10 @@ const CrearCuenta = () => {
           }
         });
         setUsuario({
-          nombre:'',
-          email:'',
-          password:'',
-          confirmar:''
+          nombre: '',
+          email: '',
+          password: '',
+          confirmar: ''
         });
         //redireccionar a la página de login:
         navigate("/login");
@@ -124,72 +125,110 @@ const CrearCuenta = () => {
   };
 
   return (
-    <main className="container mx-auto mt-5 md:mt-20 p-5 md:flex md:justify-center">
-      <div className="md:w-2/3 lg:w-2/5 ">
-        <h1 className=" inline bg-gradient-to-r from-indigo-200 via-violet-700 to-indigo-200 bg-clip-text font-display text-5xl tracking-tight text-transparent">
-          Crear cuenta
-        </h1>
-        <form className=" justify-center my-5 bg-white shadow rounded-lg p-10"
-          onSubmit={onSubmit}
-        >
-          <div className="my-1">
-
-            <label className="uppercase text-gray-600 block text-xl font-bold ">Nombre</label>
-            <input
-              type="nombre"
-              id="nombre"
-              name="nombre"
-              placeholder="Ingrese su nombre"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-              value={nombre}
-              onChange={onChange}
-            />
-
-            <label className="mt-4 uppercase text-gray-600 block text-xl font-bold ">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email de registro"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-              value={email}
-              onChange={onChange}
-            />
-            <label className="mt-4 uppercase text-gray-600 block text-xl font-bold ">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Password de registro"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-              value={password}
-              onChange={onChange}
-            />
-
-            <label className="mt-4 uppercase text-gray-600 block text-xl font-bold ">Confirme su password</label>
-            <input
-              type="password"
-              id="confirmar"
-              name="confirmar"
-              placeholder="Confirmación password"
-              className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-              value={confirmar}
-              onChange={onChange}
-            />
-
+    <main className="flex-1">
+      <header className=" px-4 py-2 bg-amber-50 border-b">
+        <div className="flex flex-row justify-between">
+          <div className="basis-1/3">
+            <div className="flex mt-4">
+              <div className="-mt-6">
+                <img src={logo512} width='100' height='100'></img>
+              </div>
+              <h1 className="ml-5 bg-gradient-to-r font-semibold  from-red-800 via-orange-700 to-yellow-600 bg-clip-text font-display text-5xl tracking-tight text-transparent">
+                Librería virtual
+              </h1>
+            </div>
           </div>
-          <input
-            type="submit"
-            value="Registrar usuario"
-            className="mt-5 bg-violet-600 mb-5 w-full py-3 text-white uppercase font-bold rounded hover:cursor-pointer hover:bg-sky-800 transition-colors"
-          />
-          <Link
-            className="block text-center my-5"
-            to={"/"}>
-            Regresar
-          </Link>
-        </form>
+          <div className="basis-1/3">
+            <h1 className="mt-5 -ml-5 bg-gradient-to-r from-red-800 via-orange-700 to-yellow-600 bg-clip-text font-display text-4xl tracking-tight text-transparent">
+              Crear cuenta
+            </h1>
+          </div>
+          <div className="mt-4 flex flex-col md:flex-row items-center gap-4">
+            <Link
+              className="bg-green-800 mb-5 w-full p-3 rounded-lg text-white uppercase font-bold hover:cursor-pointer hover:bg-green-600 transition-colors"
+              to={"/"}>
+              Volver al inicio
+            </Link>
+          </div>
+        </div>
+      </header>
+      <div
+        className="bg-bottom bg-cover h-full md:min-h-screen md:flex"
+        style={{
+          backgroundImage:
+            "url('https://res.cloudinary.com/dffbjjc7o/image/upload/v1681954004/fondo_y2obzq.jpg')",
+        }}>
+
+
+
+        <div className=" block  md:w-2/3 lg:w-1/3 content-center mx-auto ">
+
+
+          <form className=" justify-center my-5 bg-amber-50 shadow rounded-lg p-5"
+            onSubmit={onSubmit}
+          >
+            <div className="my-1">
+
+              <label className="uppercase text-teal-900 block text-xl font-bold ">Nombre: </label>
+              <input
+                type="nombre"
+                id="nombre"
+                name="nombre"
+                placeholder="Ingrese su nombre"
+                className="w-full p-3 border rounded-xl bg-gray-50"
+                value={nombre}
+                onChange={onChange}
+              />
+
+              <label className="mt-4 uppercase  text-teal-900 block text-xl font-bold ">Email:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email de registro"
+                className="w-full p-3 border rounded-xl bg-gray-50"
+                value={email}
+                onChange={onChange}
+              />
+              <label className="mt-4 uppercase  text-teal-900 block text-xl font-bold ">Password:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password de registro"
+                className="w-full  p-3 border rounded-xl bg-gray-50"
+                value={password}
+                onChange={onChange}
+              />
+
+              <label className="mt-4 uppercase  text-teal-900 block text-xl font-bold ">Confirme su password:</label>
+              <input
+                type="password"
+                id="confirmar"
+                name="confirmar"
+                placeholder="Confirmación password"
+                className="w-full  p-3 border rounded-xl bg-gray-50"
+                value={confirmar}
+                onChange={onChange}
+              />
+
+            </div>
+            <input
+              type="submit"
+              value="Registrar usuario"
+              className="ml-20 my-3 bg-green-900  w-2/3 py-3 text-white uppercase font-bold rounded hover:cursor-pointer hover:bg-green-600  transition-colors"
+            />
+            <Link
+              className="block text-center text-xl my-2 font-bold text-teal-900"
+              to={"/login"}>
+              Regresar
+            </Link>
+          </form>
+
+
+        </div>
       </div>
+
     </main>
   );
 }
